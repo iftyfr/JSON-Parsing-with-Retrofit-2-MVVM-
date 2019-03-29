@@ -42,14 +42,15 @@ public class PersonDetailsActivity extends AppCompatActivity  {
         detailToolbar = findViewById(R.id.detailToolbar);
 
         setSupportActionBar(detailToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Product Details");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Product Details");
+        }
 
         setPersonDetails(searchResult);
 
         Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoom_in);
         detailCard.startAnimation(anim);
-
 
     }
 
@@ -67,5 +68,4 @@ public class PersonDetailsActivity extends AppCompatActivity  {
         onBackPressed();
         return true;
     }
-
 }

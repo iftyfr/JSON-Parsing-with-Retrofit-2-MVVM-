@@ -17,12 +17,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements MyOnClickListener {
 
     private RecyclerView mRecyclerView;
     private PersonViewModel personViewModel;
     private Toolbar mToolbar;
+    private List<SearchResult> searchResultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,25 +34,28 @@ public class MainActivity extends AppCompatActivity implements MyOnClickListener
         mRecyclerView = findViewById(R.id.mainRecycler);
         mToolbar=findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Home Task");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Home Task");
 
         personViewModel= ViewModelProviders.of(this).get(PersonViewModel.class);
 
         personViewModel.getPersonVal().observe(this, new Observer<Person>() {
             @Override
             public void onChanged(Person person) {
-                List <SearchResult> searchResultList = person.getSearchResult();
+                searchResultList = person.getSearchResult();
+                PersonAdapter personAdapter = new PersonAdapter(MainActivity.this, searchResultList);
                 mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                mRecyclerView.setAdapter(new PersonAdapter(MainActivity.this, searchResultList,MainActivity.this));
+                mRecyclerView.setAdapter(personAdapter);
+
+                personAdapter.setMyOnClickListener(MainActivity.this);
             }
         });
     }
 
     @Override
-    public void myOnClick(SearchResult searchResult) {
-
+    public void myOnClick(int position) {
         Intent intent = new Intent(this,PersonDetailsActivity.class);
-        intent.putExtra("MyOnClick", searchResult);
+        intent.putExtra("MyOnClick", searchResultList.get(position));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 }

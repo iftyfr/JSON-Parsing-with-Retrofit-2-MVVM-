@@ -23,21 +23,23 @@ import talha.com.bd.hometask.view.PersonDetailsActivity;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonViewHolder> {
 
-    Context context;
-    List<SearchResult> searchResultList;
-    MyOnClickListener myOnClickListener;
+    private Context context;
+    private List<SearchResult> searchResultList;
+    private MyOnClickListener myOnClickListener;
 
-    public PersonAdapter(Context context, List<SearchResult> searchResultList, MyOnClickListener myOnClickListener) {
+    public PersonAdapter(Context context, List<SearchResult> searchResultList) {
         this.context = context;
         this.searchResultList = searchResultList;
-        this.myOnClickListener = myOnClickListener;
     }
 
+    public void setMyOnClickListener(MyOnClickListener clickListener) {
+        this.myOnClickListener = clickListener;
+    }
 
     @NonNull
     @Override
     public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.person_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.person_layout, parent, false);
         return new PersonViewHolder(view);
     }
 
@@ -47,13 +49,6 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
         holder.userName.setText(searchResultList.get(position).getName());
         holder.occupation.setText(searchResultList.get(position).getWho());
         Glide.with(context.getApplicationContext()).load(searchResultList.get(position).getImage()).into(holder.userImage);
-        holder.personCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myOnClickListener.myOnClick(searchResultList.get(position));
-            }
-        });
-
     }
 
     @Override
@@ -61,20 +56,30 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
         return searchResultList.size();
     }
 
-    public class PersonViewHolder extends RecyclerView.ViewHolder {
+    class PersonViewHolder extends RecyclerView.ViewHolder {
         private ImageView userImage;
         private TextView userName;
         private TextView occupation;
-        private CardView personCardView;
 
-        public PersonViewHolder(@NonNull View itemView) {
+        PersonViewHolder(@NonNull View itemView) {
             super(itemView);
 
             userImage = itemView.findViewById(R.id.userImage);
             userName = itemView.findViewById(R.id.userName);
             occupation = itemView.findViewById(R.id.occupation);
-            personCardView = itemView.findViewById(R.id.personCardView);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (myOnClickListener != null) {
+                        int position = getAdapterPosition();
+
+                        if (position != RecyclerView.NO_POSITION) {
+                            myOnClickListener.myOnClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }
