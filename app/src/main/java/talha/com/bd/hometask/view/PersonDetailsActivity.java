@@ -17,29 +17,22 @@ import com.bumptech.glide.Glide;
 
 public class PersonDetailsActivity extends AppCompatActivity  {
 
-    private PersonAdapter personAdapter;
     private ImageView personImage;
     private TextView personName;
     private TextView personOccup;
     private TextView personMobile;
-    private SearchResult searchResult;
-    private CardView detailCard;
-    private Toolbar detailToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_details);
-        setTitle("Person Details");
-
-        searchResult = (SearchResult) getIntent().getSerializableExtra("MyOnClick");
 
         personImage = findViewById(R.id.personImageView);
         personName = findViewById(R.id.user_name);
         personOccup = findViewById(R.id.occup);
         personMobile = findViewById(R.id.mobile);
-        detailCard = findViewById(R.id.detailCard);
-        detailToolbar = findViewById(R.id.detailToolbar);
+        CardView detailCard = findViewById(R.id.detailCard);
+        Toolbar detailToolbar = findViewById(R.id.detailToolbar);
 
         setSupportActionBar(detailToolbar);
         if (getSupportActionBar() != null) {
@@ -47,11 +40,12 @@ public class PersonDetailsActivity extends AppCompatActivity  {
             getSupportActionBar().setTitle("Product Details");
         }
 
-        setPersonDetails(searchResult);
+        SearchResult searchResult = (SearchResult) getIntent().getSerializableExtra("MyOnClick");
+        if (searchResult != null) {
+            setPersonDetails(searchResult);
+        }
 
-        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoom_in);
-        detailCard.startAnimation(anim);
-
+        detailCard.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zoom_in));
     }
 
 

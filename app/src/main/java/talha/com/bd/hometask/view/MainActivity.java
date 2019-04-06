@@ -22,8 +22,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements MyOnClickListener {
 
     private RecyclerView mRecyclerView;
-    private PersonViewModel personViewModel;
-    private Toolbar mToolbar;
     private List<SearchResult> searchResultList;
 
     @Override
@@ -32,11 +30,11 @@ public class MainActivity extends AppCompatActivity implements MyOnClickListener
         setContentView(R.layout.activity_main);
 
         mRecyclerView = findViewById(R.id.mainRecycler);
-        mToolbar=findViewById(R.id.mToolbar);
+        Toolbar mToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Home Task");
 
-        personViewModel= ViewModelProviders.of(this).get(PersonViewModel.class);
+        PersonViewModel personViewModel = ViewModelProviders.of(this).get(PersonViewModel.class);
 
         personViewModel.getPersonVal().observe(this, new Observer<Person>() {
             @Override

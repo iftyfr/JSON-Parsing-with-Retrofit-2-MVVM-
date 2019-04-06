@@ -1,22 +1,25 @@
 package talha.com.bd.hometask.viewmodel;
 
+import android.app.Application;
 
-import java.util.List;
-
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import talha.com.bd.hometask.model.Person;
+import talha.com.bd.hometask.model.PersonRepository;
 import talha.com.bd.hometask.remote.RetrofitApiClient;
 
-public class PersonViewModel extends ViewModel {
+public class PersonViewModel extends AndroidViewModel {
 
     private LiveData <Person> person;
-    private RetrofitApiClient retrofitApiClient = new RetrofitApiClient();
 
+    public PersonViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public LiveData <Person> getPersonVal(){
         if (person == null){
-            person = retrofitApiClient.getPersontList();
+            person = new PersonRepository().getPersonList();
         }
         return person;
     }

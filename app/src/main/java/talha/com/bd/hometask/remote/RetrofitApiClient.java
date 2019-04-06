@@ -22,9 +22,10 @@ public class RetrofitApiClient {
             .setLenient()
             .create();
 
-    public RetrofitApiClient() {}
+    private RetrofitApiClient() {
+    }
 
-    public static Retrofit getClient() {
+    private static Retrofit getClient() {
         if (retrofit == null) {
             synchronized (RetrofitApiClient.class) { //thread safe Singleton implementation
                 if (retrofit == null) {
@@ -39,31 +40,7 @@ public class RetrofitApiClient {
         return retrofit;
     }
 
-    public static APIService getApiService(){
+    public static APIService getApiService() {
         return getClient().create(APIService.class);
     }
-
-
-
-
-    public LiveData <Person> getPersontList() {
-        final MutableLiveData<Person> data = new MutableLiveData<>();
-        APIService apiService = RetrofitApiClient.getApiService();
-
-        apiService.getPerson().enqueue(new Callback<Person>() {
-            @Override
-            public void onResponse(Call<Person> call, Response<Person> response) {
-                if (response.isSuccessful()){
-                    data.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Person> call, Throwable t) {
-                data.setValue(new Person(t.getMessage()));
-            }
-        });
-        return data;
-    }
-
 }

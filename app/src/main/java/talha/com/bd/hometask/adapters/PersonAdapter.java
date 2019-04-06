@@ -23,12 +23,10 @@ import talha.com.bd.hometask.view.PersonDetailsActivity;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonViewHolder> {
 
-    private Context context;
     private List<SearchResult> searchResultList;
     private MyOnClickListener myOnClickListener;
 
-    public PersonAdapter(Context context, List<SearchResult> searchResultList) {
-        this.context = context;
+    public PersonAdapter(List<SearchResult> searchResultList) {
         this.searchResultList = searchResultList;
     }
 
@@ -39,16 +37,14 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
     @NonNull
     @Override
     public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.person_layout, parent, false);
-        return new PersonViewHolder(view);
+        return new PersonViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.person_layout, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull PersonViewHolder holder, final int position) {
-
         holder.userName.setText(searchResultList.get(position).getName());
         holder.occupation.setText(searchResultList.get(position).getWho());
-        Glide.with(context.getApplicationContext()).load(searchResultList.get(position).getImage()).into(holder.userImage);
+        Glide.with(holder.userImage.getContext()).load(searchResultList.get(position).getImage()).into(holder.userImage);
     }
 
     @Override
@@ -58,8 +54,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
 
     class PersonViewHolder extends RecyclerView.ViewHolder {
         private ImageView userImage;
-        private TextView userName;
-        private TextView occupation;
+        private TextView userName, occupation;
 
         PersonViewHolder(@NonNull View itemView) {
             super(itemView);
